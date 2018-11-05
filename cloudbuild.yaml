@@ -1,0 +1,23 @@
+steps:
+# Add some checks around examples.
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    # File that contains failures.
+    gcloud builds submit --tag gcr.io/mwp-alm/aet-tmn-member-app:v001 .
+    gsutil cp gs://mwp-alm_cloudbuild/keys/mwp-alm-fdc2c08f2ba3.json .
+    gcloud auth activate-service-account aaa-devops-deployment@mwp-alm.iam.gserviceaccount.com --key-file=mwp-alm-fdc2c08f2ba3.json --project=mwp-alm
+    echo "build successful."
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - set
+  - image
+  - deployment
+  - aaa-web
+  - aaa-web=gcr.io/mwp-alm/aet-tmn-member-app:v001
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=cluster-aaa-01'

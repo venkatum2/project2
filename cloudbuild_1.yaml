@@ -1,0 +1,72 @@
+steps:
+# Add some checks around examples.
+
+    
+- name: 'debian'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    pwd
+    mkdir app
+    cp package.json ./app
+    
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install'] 
+  dir: 'app'
+  
+- name: 'debian'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    # File that contains failures.
+    pwd
+    dir
+    cp -r `ls -A | grep -v "app"` ./app
+    cd app
+    pwd
+    dir
+- name: 'gcr.io/cloud-builders/npm'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    # File that contains failures.
+    pwd
+    dir
+    npm install -g ionic cordova
+    ionic build --prod
+  dir: 'app'  
+  
+- name: 'gcr.io/cloud-builders/docker'
+  volumes:
+  - name: 'vol1'
+    path: '/persistent_volume'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    # File that contains failures.
+    docker pull nginx:alpine
+    pwd
+    dir
+    cp nginx.conf /etc/nginx/nginx.conf
+    
+- name: 'debian'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    # File that contains failures.
+    pwd
+    dir
+    #cp nginx.conf 
+    /etc/nginx/nginx.conf
+    cp www /usr/share/nginx/html/
+    dir: 'app' 
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t gcr.io/wmp-alm/aet-tmn-member-app:v1002', '.']  
+- name: 'gcr.io/cloud-builders/docker'
+  args: ["push", "gcr.io/wmp-alm/aet-tmn-member-app:v1002"]

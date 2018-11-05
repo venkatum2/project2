@@ -1,0 +1,13 @@
+{
+  "name": "aet-frontend-apps",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "pro_id": "b78317a7",
+  "hosting": {
+    "headers": [
+      { "source":"/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+    ]
+  }
+}

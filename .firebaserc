@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "mwp-sandbox-aaa-ers"
+  },
+  "targets": {
+    "mwp-sandbox-aaa-ers": {
+      "hosting": {
+        "test": [
+          "mwp-sandbox-aaa-ers-test"
+        ],
+        "prod": [
+          "mwp-sandbox-aaa-ers"
+        ]
+      }
+    }
+  }
+}
